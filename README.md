@@ -28,7 +28,7 @@ advanced usage
 #### wazuh-aws-ecs
     deployment ecs-task.yaml files for AWS ECS on CloudFormation.
 
-    ecs-task.yaml
+    aws-ecs-task.yaml
 #### Source
 
 https://github.com/kkpkishan/wazuh-agent.git    
