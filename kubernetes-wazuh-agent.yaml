@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: wazuh-agent
+  namespace: logging
+spec:
+  selector:
+    matchLabels:
+      app: wazuh-agent
+  template:
+    metadata:
+      labels:
+        app: wazuh-agent
+    spec:
+      imagePullSecrets:
+      - name: docker-secret
+      containers:
+      - env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: JOIN_MANAGER
+          value: "IP or Endpoint"
+        - name: JOIN_WORKER
+          value: "IP or Endpoint"
+        - name: JOIN_GROUPS
+          value: default
+        image: kkpkishan/wazuh-agent:4.3.10-1-dev
+        name: agent
+        resources:
+          limits:
+            cpu: 50m
+            memory: 200Mi
+          requests:
+            cpu: 10m
+            memory: 50Mi
+        volumeMounts:
+        - mountPath: /var/log
+          name: log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+      - hostPath:
+          path: /var/log
+          type: ""
+        name: log

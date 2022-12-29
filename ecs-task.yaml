@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: |
+
+  Wazuh Agent ECS integration.
+
+  - Registers the Wazuh Agent integration task.
+
+Resources:
+    WazuhAgentInfraTask:
+      Type: "AWS::ECS::TaskDefinition"
+      Properties:
+        Family: "wazuhagent-infra"
+        RequiresCompatibilities:
+          - EC2
+          - EXTERNAL
+        NetworkMode: host
+        ExecutionRoleArn: !GetAtt WazuhAgentECSTaskExecutionRole.Arn
+        Volumes:
+          - Name: host_root_fs
+            Host:
+              SourcePath: "/"
+          - Name: host_root_logs
+            Host:
+              SourcePath: "/var/log"
+          - Name: docker_socket
+            Host:
+              SourcePath: "/var/run/docker.sock"
+        ContainerDefinitions:
+          -
+            PortMappings: []
+            Cpu: 200
+            Memory: 384
+            Environment:
+              - Name: JOIN_MANAGER
+                Value: "IP or Endpoint"
+              - Name: JOIN_WORKER
+                Value: "IP or Endpoint"
+              - Name: JOIN_GROUPS
+                Value: "default"
+            MountPoints:
+              - ReadOnly: true
+                ContainerPath: "/host"
+                SourceVolume: host_root_fs
+              - ReadOnly: true
+                ContainerPath: "/var/log"
+                SourceVolume: host_root_logs
+              - ReadOnly: false
+                ContainerPath: "/var/run/docker.sock"
+                SourceVolume: docker_socket
+            VolumesFrom: []
+            Image: "kkpkishan/wazuh-agent:4.3.10-1-dev"
+            Essential: true
+            ReadonlyRootFilesystem: false
+            Privileged: true
+            Name: "wazuhagent-infra"
+    WazuhAgentECSTaskExecutionRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2008-10-17"
+          Statement:
+            - Sid: ""
+              Effect: Allow
+              Principal:
+                Service: ecs-tasks.amazonaws.com
+              Action: "sts:AssumeRole"
+        Description: "ECS task execution role for WazuhAgent infrastructure"
+        ManagedPolicyArns:
+          - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+
+
+Outputs:
+  ExecutionRoleARN:
+    Description: "ECS Execution Role with WazuhAgent access"
+    Value: !Ref WazuhAgentECSTaskExecutionRole
