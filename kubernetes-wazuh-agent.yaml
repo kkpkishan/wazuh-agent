@@ -12,8 +12,6 @@ spec:
       labels:
         app: wazuh-agent
     spec:
-      imagePullSecrets:
-      - name: docker-secret
       containers:
       - env:
         - name: HOSTNAME
