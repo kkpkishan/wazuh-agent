@@ -1,7 +1,3 @@
-## WAZUH Agent AWS Fargate
-![](src/001.png)
-
-
 ## WAZUH Agent Docker RUN Description
 
 Wazuh Agent as Docker Image.
@@ -19,16 +15,19 @@ advanced usage
       -v /var/ossec/ossec.conf:/var/ossec/etc/ossec.conf \
       -v /var/ossec/local_internal_options.conf:/var/ossec/etc/local_internal_options.conf \
       -v /var/ossec/client.keys:/var/ossec/etc/client.keys kkpkishan/wazuh-agent:4.3.10-1-dev
-#### wazuh-kubernetes
+
+## wazuh-kubernetes
     deployment kubernetes-wazuh-agent.yaml files for kubernetes on  cluster.
 
     kubectl create ns logging
     kubectl apply -f kubernetes-wazuh-agent.yaml
 
-#### wazuh-aws-ecs
+## wazuh-aws-ecs
     deployment ecs-task.yaml files for AWS ECS on CloudFormation.
 
     aws-ecs-task.yaml
+![](src/001.png)
+
 #### Source
 
 https://github.com/kkpkishan/wazuh-agent.git    
