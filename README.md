@@ -1,4 +1,4 @@
-## WAZUH Agent AWS EKS
+## WAZUH Agent AWS Fargate
 ![](src/001.png)
 
 
