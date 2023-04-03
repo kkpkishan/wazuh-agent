@@ -1,10 +1,10 @@
-## docker-wazuh-agent
+## WAZUH Agent AWS Fargate
+![](src/001.png)
 
-#### Description
+
+## WAZUH Agent Docker RUN Description
 
 Wazuh Agent as Docker Image.
-
-#### Run
 
 simple way of running the container
 
